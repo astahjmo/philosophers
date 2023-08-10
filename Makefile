@@ -1,22 +1,21 @@
 VPATH	= ./src/ ./src/utils ./src/dinner
-SRCS	= main.c
+SRCS	= main.c print.c atoi.c check_args.c
 BUILDIR	= ./build/
 OBJS	= $(addprefix $(BUILDIR), $(SRCS:.c=.o))
 INCLUDE	= ./include/
 NAME	= philo
-CC		= gcc
-CFLAGD	= -g #-Wall -Wextra -Werror
+CFLAGS	= -g -Wall -Wextra -Werror
 
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@echo "Building $(NAME) program!"
+	@printf "\nBuilding $(NAME) program!"
 	@$(CC) $(CFLAGS) -I $(INCLUDE) $(OBJS) -o $(NAME)
-	@echo "BUild complete!"
+	@echo "\nBuild complete!"
 
 $(BUILDIR)%.o: %.c
-	@echo "Compiling the $<"
+	@printf "\rCompiling the $<"
 	@test -d $(BUILDIR) || mkdir $(BUILDIR)
 	@$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
 
@@ -25,3 +24,5 @@ clean:
 
 fclean: clean
 	@rm $(NAME)
+
+re: fclean all
