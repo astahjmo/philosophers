@@ -11,19 +11,22 @@
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <stdio.h>
 
-size_t	*getter_rules(void)
+t_bool	init_arguments(int argc, char *argv[])
 {
-	static size_t	rules[MAX_ARGS];
+	size_t	*rules;
+	int		ix;
 
-	return (rules);
-}
-
-int	main(int argc, char *argv[])
-{
-	if (argc > 6 || argc < 5)
-		return (print_fd(WRONG_PARMS, 1));
-	if (!init_arguments(argc, argv))
-		return (print_fd(*get_error_msg(), STDERR_FILENO));
+	rules = getter_rules();
+	ix = 1;
+	while (ix < argc)
+	{
+		if (!check_isdigit(argv[ix - 1]))
+			return (set_error_exit(WRONG_PARMS));
+		if (!check_negative(argv[ix - 1]))
+			return (set_error_exit(NEGATIVE_VAL));
+		rules[ix - 1] = ft_atoi(argv[ix]);
+		ix++;
+	}
+	return (TRUE);
 }

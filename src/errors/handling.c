@@ -11,19 +11,19 @@
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <stdio.h>
 
-size_t	*getter_rules(void)
+char	**get_error_msg(void)
 {
-	static size_t	rules[MAX_ARGS];
+	static char	*msg = {NULL};
 
-	return (rules);
+	return (&msg);
 }
 
-int	main(int argc, char *argv[])
+t_bool	set_error_exit(char *msg)
 {
-	if (argc > 6 || argc < 5)
-		return (print_fd(WRONG_PARMS, 1));
-	if (!init_arguments(argc, argv))
-		return (print_fd(*get_error_msg(), STDERR_FILENO));
+	char	**address;
+
+	address = get_error_msg();
+	*address = msg;
+	return (FALSE);
 }

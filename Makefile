@@ -1,5 +1,5 @@
-VPATH	= ./src/ ./src/utils ./src/dinner
-SRCS	= main.c print.c atoi.c check_args.c
+VPATH	= ./src/ ./src/utils ./src/dinner ./src/errors ./src/parser
+SRCS	= main.c print.c atoi.c check_args.c init_arguments.c handling.c
 BUILDIR	= ./build/
 OBJS	= $(addprefix $(BUILDIR), $(SRCS:.c=.o))
 INCLUDE	= ./include/

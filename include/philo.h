@@ -35,5 +35,9 @@ size_t			ft_atoi(char *str);
 t_bool			check_isdigit(char *str);
 t_bool			check_negative(char *str);
 t_bool			is_valid(char *str);
+char			**get_error_msg(void);
+t_bool			set_error_exit(char *msg);
+size_t			*getter_rules(void);
+t_bool			init_arguments(int argc, char *argv[]);
 
 #endif
