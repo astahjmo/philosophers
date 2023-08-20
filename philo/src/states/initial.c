@@ -12,18 +12,22 @@
 
 #include "philo.h"
 #include <pthread.h>
+#include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
-static void	*print_count(void *arg)
+static void	*state_handler(void *arg)
 {
 	t_philo	*philo;
 
 	philo = arg;
-	(void)philo;
-	pthread_mutex_lock(&getter_table()->channel);
-	printf("%d teste\n", philo->id);
-	pthread_mutex_unlock(&getter_table()->channel);
+	while (1)
+	{
+		try_to_eat(philo);
+		sleeping(philo);
+		thinking(philo);
+	}
 	pthread_detach(philo->thread_id);
 	free(philo);
 	return (NULL);
@@ -41,17 +45,23 @@ static void	init_threads(size_t count)
 	philo->right_fork = count;
 	philo->id = count;
 	philo->times_to_eat = getter_rules()[5];
-	philo->last_eaten = get_time();
-	if (pthread_create(&philo->thread_id, NULL, print_count, philo) != 0)
-		printf("after\n");
+	getter_table()->start = get_time();
+	getter_table()->philo[count] = philo;
+	pthread_create(&philo->thread_id, NULL, state_handler, philo);
 }
 
 static void	init_table(void)
 {
 	t_table	*table;
+	size_t	count;
 
+	count = 0;
 	table = getter_table();
+	table->philo = malloc(sizeof(t_philo *) * getter_rules()[PHILO_QT]);
 	pthread_mutex_init(&table->channel, 0);
+	table->forks = malloc(getter_rules()[PHILO_QT] * sizeof(pthread_mutex_t));
+	while (count < getter_rules()[PHILO_QT])
+		pthread_mutex_init(&table->forks[count++], NULL);
 }
 
 void	initial(void)
@@ -65,6 +75,4 @@ void	initial(void)
 		init_threads(count);
 		count++;
 	}
-	while (1)
-		;
 }

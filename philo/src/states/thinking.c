@@ -11,17 +11,9 @@
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <sys/time.h>
 
-int	get_time_from_start(void)
+void	thinking(t_philo *philo)
 {
-	return (get_time() - getter_table()->start);
-}
-
-int	get_time(void)
-{
-	struct timeval	timeval;
-
-	gettimeofday(&timeval, NULL);
-	return (((timeval.tv_sec * 1000000) + timeval.tv_usec) / 1000);
+	printf("%d %d is thinking\n", get_time_from_start(), philo->id);
+	usleep(999);
 }
