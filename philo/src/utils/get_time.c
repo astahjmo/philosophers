@@ -12,18 +12,10 @@
 
 #include "philo.h"
 
-size_t	*getter_rules(void)
+long	get_time(void)
 {
-	static size_t	rules[MAX_ARGS];
+	struct timeval	time;
 
-	return (rules);
-}
-
-int	main(int argc, char *argv[])
-{
-	if (argc > 6 || argc < 5)
-		return (print_fd(WRONG_PARMS, 1));
-	if (!init_arguments(argc, argv))
-		return (print_fd(*get_error_msg(), STDERR_FILENO));
-	initial();
+	gettimeofday(&time, 0);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }

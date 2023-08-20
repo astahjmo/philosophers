@@ -15,21 +15,31 @@
 # include "./error.h"
 # include "unistd.h"
 # include <stddef.h>
+# include <pthread.h>
 # include <stdint.h>
+# include <malloc.h>
+# include "stdio.h"
 # define MAX_ARGS 5
 # define FALSE 0
 # define TRUE 1
+# include <sys/time.h>
 
 typedef unsigned int	t_bool;
 typedef short int		t_sint;
 
+typedef struct _s_table
+{
+	pthread_mutex_t	channel;
+}	t_table;
+
 typedef struct _s_philo
 {
-	t_sint	id;
-	t_sint	left_fork;
-	t_sint	right_fork;
-	t_sint	last_eaten;
-	t_sint	times_to_eat;
+	t_sint		id;
+	pthread_t	thread_id;
+	t_sint		left_fork;
+	t_sint		right_fork;
+	long		last_eaten;
+	t_sint		times_to_eat;
 }	t_philo;
 
 typedef enum e_states
@@ -58,5 +68,8 @@ char			**get_error_msg(void);
 t_bool			set_error_exit(char *msg);
 size_t			*getter_rules(void);
 t_bool			init_arguments(int argc, char *argv[]);
-
+long			get_time(void);
+t_table			*getter_table(void);
+void			initial(void);
+char			*ft_itoa(int n);
 #endif
