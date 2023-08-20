@@ -24,22 +24,25 @@ static void	*print_count(void *arg)
 	pthread_mutex_lock(&getter_table()->channel);
 	printf("%d teste\n", philo->id);
 	pthread_mutex_unlock(&getter_table()->channel);
+	pthread_detach(philo->thread_id);
+	free(philo);
 	return (NULL);
 }
 
 static void	init_threads(size_t count)
 {
-	t_philo	philo;
+	t_philo	*philo;
 
+	philo = malloc(sizeof(t_philo) * 1);
 	if (count == 0 && getter_rules()[0] > 1)
-		philo.left_fork = getter_rules()[0] - 1;
+		philo->left_fork = getter_rules()[0] - 1;
 	else
-		philo.left_fork = count - 1;
-	philo.right_fork = count;
-	philo.id = count;
-	philo.times_to_eat = getter_rules()[5];
-	philo.last_eaten = get_time();
-	if (pthread_create(&philo.thread_id, NULL, print_count, &philo) != 0)
+		philo->left_fork = count - 1;
+	philo->right_fork = count;
+	philo->id = count;
+	philo->times_to_eat = getter_rules()[5];
+	philo->last_eaten = get_time();
+	if (pthread_create(&philo->thread_id, NULL, print_count, philo) != 0)
 		printf("after\n");
 }
 
