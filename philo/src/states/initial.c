@@ -12,67 +12,82 @@
 
 #include "philo.h"
 #include <pthread.h>
-#include <stddef.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 
-static void	*state_handler(void *arg)
+void	take_forks(t_philo *philo)
+{
+	if (philo->id & 1)
+	{
+		pthread_mutex_lock(philo->left_fork);
+		pthread_mutex_lock(&philo->rigth_fork);
+		return ;
+	}
+	pthread_mutex_lock(&philo->rigth_fork);
+	pthread_mutex_lock(&philo->table->channel);
+	printf("%d %d has taken fork\n", get_time_from_start(philo), philo->id);
+	pthread_mutex_lock(philo->left_fork);
+	printf("%d %d has taken fork\n", get_time_from_start(philo), philo->id);
+	pthread_mutex_unlock(&philo->table->channel);
+}
+
+void	drop_forks(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->table->channel);
+	printf("%d %d drop a fork\n", get_time_from_start(philo), philo->id);
+	pthread_mutex_unlock(&philo->table->channel);
+	pthread_mutex_unlock(philo->left_fork);
+	pthread_mutex_unlock(&philo->rigth_fork);
+}
+
+static void	*state_handler(void *args)
 {
 	t_philo	*philo;
 
-	philo = arg;
-	while (1)
-	{
-		try_to_eat(philo);
-		sleeping(philo);
+	philo = (t_philo *)args;
+	if ((philo->id & 1) == 1)
 		thinking(philo);
-	}
-	pthread_detach(philo->thread_id);
-	free(philo);
+	take_forks(philo);
+	eating(philo);
+	drop_forks(philo);
+	sleeping(philo);
+	thinking(philo);
 	return (NULL);
 }
 
-static void	init_threads(size_t count)
+static void	init_philo(t_philo *philo, size_t count)
 {
-	t_philo	*philo;
-
-	philo = malloc(sizeof(t_philo) * 1);
-	if (count == 0 && getter_rules()[0] > 1)
-		philo->left_fork = getter_rules()[0] - 1;
+	philo[count].id = count;
+	philo[count].times_to_eat = getter_rules()[TIMES_TO_EAT];
+	philo[count].lifetime = getter_rules()[LIFETIME];
+	philo[count].sleep_time = getter_rules()[SLEEP_TIME];
+	philo[count].lunch_time = getter_rules()[LUNCHTIME];
+	if (count == 0 && getter_rules()[PHILO_QT] > 1)
+		philo[count].left_fork = &philo[3].rigth_fork;
 	else
-		philo->left_fork = count - 1;
-	philo->right_fork = count;
-	philo->id = count;
-	philo->times_to_eat = getter_rules()[5];
-	getter_table()->start = get_time();
-	getter_table()->philo[count] = philo;
-	pthread_create(&philo->thread_id, NULL, state_handler, philo);
+		philo[count].left_fork = &philo[count - 1].rigth_fork;
+	philo[count].table = getter_table();
+	pthread_mutex_init(philo[count].left_fork, NULL);
+	pthread_mutex_init(&philo[count].rigth_fork, NULL);
 }
 
-static void	init_table(void)
+static void	init_mutex(void)
 {
-	t_table	*table;
-	size_t	count;
-
-	count = 0;
-	table = getter_table();
-	table->philo = malloc(sizeof(t_philo *) * getter_rules()[PHILO_QT]);
-	pthread_mutex_init(&table->channel, 0);
-	table->forks = malloc(getter_rules()[PHILO_QT] * sizeof(pthread_mutex_t));
-	while (count < getter_rules()[PHILO_QT])
-		pthread_mutex_init(&table->forks[count++], NULL);
+	pthread_mutex_init(&getter_table()->channel, NULL);
 }
 
 void	initial(void)
 {
-	size_t		count;
+	t_philo	philo[MAX_PHILO];
+	size_t	count;
 
-	init_table();
-	count = 0;
-	while (count < getter_rules()[0])
-	{
-		init_threads(count);
-		count++;
-	}
+	init_mutex();
+	count = -1;
+	while (++count < getter_rules()[PHILO_QT])
+		init_philo(philo, count);
+	count = -1;
+	getter_table()->start = get_time();
+	while (++count < getter_rules()[PHILO_QT])
+			pthread_create(&philo[count].thread_id, NULL, state_handler, &philo[count]);
+	while (1)
+		;
 }

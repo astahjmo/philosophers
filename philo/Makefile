@@ -1,7 +1,7 @@
 VPATH	= ./src/ ./src/errors ./src/parser ./src/states ./src/utils ./src/states
 SRCS	= main.c print.c atoi.c init_arguments.c handling.c \
 		  logic_utils.c initial.c get_time.c getter_table.c \
-		  itoa.c eating.c sleeping.c thinking.c
+		  itoa.c eating.c sleeping.c thinking.c destroy_philo.c 
 BUILDIR	= ./build/
 OBJS	= $(addprefix $(BUILDIR), $(SRCS:.c=.o))
 INCLUDE	= ./include/

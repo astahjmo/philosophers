@@ -13,8 +13,9 @@
 #include "philo.h"
 #include <sys/time.h>
 
-int	get_time_from_start(void)
+int	get_time_from_start(t_philo *philo)
 {
+	(void)philo;
 	return (get_time() - getter_table()->start);
 }
 
@@ -23,5 +24,5 @@ int	get_time(void)
 	struct timeval	timeval;
 
 	gettimeofday(&timeval, NULL);
-	return (((timeval.tv_sec * 1000000) + timeval.tv_usec) / 1000);
+	return (timeval.tv_sec * 1000 + timeval.tv_usec / 1000);
 }

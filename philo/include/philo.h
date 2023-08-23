@@ -13,46 +13,52 @@
 #ifndef PHILO_H
 # define PHILO_H
 # include "./error.h"
-# include "unistd.h"
 # include <stddef.h>
 # include <pthread.h>
 # include <stdint.h>
+# include <unistd.h>
 # include <malloc.h>
 # include <sys/time.h>
-# include "stdio.h"
 # define MAX_ARGS 5
 # define FALSE 0
 # define TRUE 1
 # define PHILO_QT 0
-# define DIE_TIME 1
-# define EAT_TIME 2
+# define LIFETIME 1
+# define LUNCHTIME 2
 # define SLEEP_TIME 3
-# define TIME_TO_EAT 4
+# define TIMES_TO_EAT 4
+# define MAX_PHILO 200
 
 # include <sys/time.h>
 
 typedef unsigned int	t_bool;
 typedef short int		t_sint;
-
-typedef struct _s_philo
-{
-	t_sint		id;
-	pthread_t	thread_id;
-	t_sint		left_fork;
-	t_sint		right_fork;
-	long		last_eaten;
-	t_sint		times_to_eat;
-}	t_philo;
+typedef struct _s_table	t_table;
+typedef struct _s_philo	t_philo;
 
 typedef struct _s_table
 {
 	pthread_mutex_t	channel;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	is_dead;
-	long long int	start;
-	t_philo			**philo;
+	t_bool			end;
+	int				start;
+	t_philo			*philo[PHILO_QT];
 
 }	t_table;
+
+typedef struct _s_philo
+{
+	t_sint			id;
+	pthread_t		thread_id;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	rigth_fork;
+	long			last_eaten;
+	t_sint			times_to_eat;
+	int				start;
+	size_t			lifetime;
+	size_t			lunch_time;
+	size_t			sleep_time;
+	t_table			*table;
+}	t_philo;
 
 typedef enum e_states
 {
@@ -85,7 +91,10 @@ t_table			*getter_table(void);
 void			initial(void);
 char			*ft_itoa(int n);
 void			try_to_eat(t_philo *philo);
-int				get_time_from_start(void);
+int				get_time_from_start(t_philo *philo);
 void			sleeping(t_philo *philo);
 void			thinking(t_philo *philo);
+void			destroy_philo(void);
+t_bool			is_end(void);
+void			eating(t_philo *philo);
 #endif
