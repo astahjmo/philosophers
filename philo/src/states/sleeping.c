@@ -14,8 +14,6 @@
 
 void	sleeping(t_philo *philo)
 {
-	pthread_mutex_lock(&getter_table()->channel);
-	printf("%d %d is sleeping\n", get_time_from_start(philo), philo->id);
-	pthread_mutex_unlock(&getter_table()->channel);
+	print_action("is sleeping", philo);
 	usleep(getter_rules()[SLEEP_TIME] * 1000);
 }

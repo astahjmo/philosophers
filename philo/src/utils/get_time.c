@@ -11,11 +11,9 @@
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <sys/time.h>
 
-int	get_time_from_start(t_philo *philo)
+int	get_time_from_start(void)
 {
-	(void)philo;
 	return (get_time() - getter_table()->start);
 }
 

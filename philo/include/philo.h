@@ -39,9 +39,10 @@ typedef struct _s_philo	t_philo;
 typedef struct _s_table
 {
 	pthread_mutex_t	channel;
-	t_bool			end;
+	pthread_mutex_t	end;
+	t_bool			is_the_end;
 	int				start;
-	t_philo			*philo[PHILO_QT];
+	t_philo			*philo;
 
 }	t_table;
 
@@ -51,9 +52,10 @@ typedef struct _s_philo
 	pthread_t		thread_id;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	rigth_fork;
-	long			last_eaten;
+	int				last_eaten;
 	t_sint			times_to_eat;
 	int				start;
+	pthread_mutex_t	last_lunch;
 	size_t			lifetime;
 	size_t			lunch_time;
 	size_t			sleep_time;
@@ -91,10 +93,15 @@ t_table			*getter_table(void);
 void			initial(void);
 char			*ft_itoa(int n);
 void			try_to_eat(t_philo *philo);
-int				get_time_from_start(t_philo *philo);
+int				get_time_from_start(void);
 void			sleeping(t_philo *philo);
 void			thinking(t_philo *philo);
 void			destroy_philo(void);
 t_bool			is_end(void);
 void			eating(t_philo *philo);
+void			print_action(char *msg, t_philo *philo);
+void			take_forks(t_philo *philo);
+void			drop_forks(t_philo *philo);
+void			update_time(t_philo *philo);
+void			god(void);
 #endif

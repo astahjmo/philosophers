@@ -14,11 +14,9 @@
 
 void	eating(t_philo *philo)
 {
-	philo->last_eaten = get_time();
-	pthread_mutex_lock(&getter_table()->channel);
-	printf("%d %d is eating\n", get_time_from_start(philo), philo->id);
-	pthread_mutex_unlock(&getter_table()->channel);
+	print_action("is eating", philo);
+	update_time(philo);
 	if (philo->times_to_eat > 0)
-		philo->times_to_eat--; 
+		philo->times_to_eat--;
 	usleep(philo->lunch_time * 1000);
 }

@@ -14,8 +14,6 @@
 
 void	thinking(t_philo *philo)
 {
-	pthread_mutex_lock(&getter_table()->channel);
-	printf("%d %d is thinking\n", get_time_from_start(philo), philo->id);
-	pthread_mutex_unlock(&getter_table()->channel);
+	print_action("is thinking", philo);
 	usleep(1000);
 }
