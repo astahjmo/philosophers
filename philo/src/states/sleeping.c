@@ -14,6 +14,6 @@
 
 void	sleeping(t_philo *philo)
 {
-	printf("%d %d is sleeping\n", get_time_from_start(), philo->id);
+	print_action("is sleeping", philo);
 	usleep(getter_rules()[SLEEP_TIME] * 1000);
 }

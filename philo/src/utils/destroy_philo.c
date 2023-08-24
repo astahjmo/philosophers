@@ -11,12 +11,13 @@
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <pthread.h>
+#include <unistd.h>
 
-void	eating(t_philo *philo)
+void	destroy_philo(void)
 {
-	print_action("is eating", philo);
-	update_time(philo);
-	if (philo->times_to_eat > 0)
-		philo->times_to_eat--;
-	usleep(philo->lunch_time * 1000);
+	t_table	*table;
+
+	table = getter_table();
+	free(table->philo);
 }

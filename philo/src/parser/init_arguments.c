@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <stdio.h>
 
 t_bool	init_arguments(int argc, char *argv[])
 {

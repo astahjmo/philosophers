@@ -14,6 +14,6 @@
 
 void	thinking(t_philo *philo)
 {
-	printf("%d %d is thinking\n", get_time_from_start(), philo->id);
-	usleep(999);
+	print_action("is thinking", philo);
+	usleep(1000);
 }

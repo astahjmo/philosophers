@@ -11,16 +11,60 @@
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <pthread.h>
+#include <stdio.h>
 
-int	get_time_from_start(void)
+static void	set_dead(void);
+
+t_bool	is_dead(t_philo *philo)
 {
-	return (get_time() - getter_table()->start);
+	pthread_mutex_lock(&philo->last_lunch);
+	if ((get_time() - philo->last_eaten) > (int)getter_rules()[LIFETIME])
+	{
+		return (TRUE);
+		
+	}
+	pthread_mutex_unlock(&philo->last_lunch);
+	return (FALSE);
 }
 
-int	get_time(void)
+static void	set_dead(void)
 {
-	struct timeval	timeval;
+	pthread_mutex_lock(&getter_table()->end);
+	getter_table()->is_the_end = 1;
+	pthread_mutex_unlock(&getter_table()->end);
+}
 
-	gettimeofday(&timeval, NULL);
-	return (timeval.tv_sec * 1000 + timeval.tv_usec / 1000);
+t_bool	is_end(void)
+{
+	t_bool	end;
+
+	pthread_mutex_lock(&getter_table()->end);
+	end = getter_table()->is_the_end;
+	pthread_mutex_unlock(&getter_table()->end);
+	return (end);
+}
+
+void	god(void)
+{
+	t_philo	*philo;
+	size_t	count;
+	t_bool	end;
+
+	end = FALSE;
+	count = 0;
+	philo = getter_table()->philo;
+	while (!end)
+	{
+		while (count < getter_rules()[PHILO_QT])
+		{
+			if (is_dead(&philo[count]))
+			{
+				end = TRUE;
+				set_dead();
+			}	
+			count++;
+		}
+		count = 0;
+	}
 }
