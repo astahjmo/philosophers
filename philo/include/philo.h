@@ -52,6 +52,7 @@ typedef struct _s_philo
 	pthread_t		thread_id;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	rigth_fork;
+	pthread_mutex_t	times_run;
 	int				last_eaten;
 	t_sint			times_to_eat;
 	int				start;
@@ -104,4 +105,5 @@ void			take_forks(t_philo *philo);
 void			drop_forks(t_philo *philo);
 void			update_time(t_philo *philo);
 void			god(void);
+int				acc(t_philo *philo);
 #endif
