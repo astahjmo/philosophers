@@ -6,7 +6,7 @@
 /*   By: johmatos <johmatos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 23:26:54 by johmatos          #+#    #+#             */
-/*   Updated: 2023/08/27 23:26:54 by johmatos         ###   ########.fr       */
+/*   Updated: 2023/08/28 17:00:46 by johmatos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,15 @@ void	take_forks(t_philo *philo)
 	}
 	pthread_mutex_lock(&philo->rigth_fork);
 	print_action("has taken a fork", philo);
+	if (philo->left_fork == NULL)
+		return ;
 	pthread_mutex_lock(philo->left_fork);
 	print_action("has taken a fork", philo);
 }
 
 void	drop_forks(t_philo *philo)
 {
-	pthread_mutex_unlock(philo->left_fork);
+	if (philo->left_fork)
+		pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(&philo->rigth_fork);
 }

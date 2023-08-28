@@ -18,7 +18,7 @@ $(NAME): $(OBJS)
 	@echo "\nBuild complete!"
 
 $(BUILDIR)%.o: %.c
-	@printf "\rCompiling the $<"
+	@printf "\rCompiling the $<           "
 	@test -d $(BUILDIR) || mkdir $(BUILDIR)
 	@$(CC) $(CFLAGS) -I $(INCLUDE) -c $< -o $@
 

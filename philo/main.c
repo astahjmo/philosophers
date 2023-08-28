@@ -6,7 +6,7 @@
 /*   By: johmatos <johmatos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 14:03:44 by johmatos          #+#    #+#             */
-/*   Updated: 2023/08/27 23:27:17 by johmatos         ###   ########.fr       */
+/*   Updated: 2023/08/28 18:41:38 by johmatos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,5 @@ int	main(int argc, char *argv[])
 	if (!init_arguments(argc, argv))
 		return (print_fd(*get_error_msg(), STDERR_FILENO));
 	initial();
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: johmatos <johmatos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 23:27:14 by johmatos          #+#    #+#             */
-/*   Updated: 2023/08/27 23:27:15 by johmatos         ###   ########.fr       */
+/*   Updated: 2023/08/28 16:13:06 by johmatos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,5 @@
 
 void	update_time(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->last_lunch);
 	philo->last_eaten = get_time();
-	pthread_mutex_unlock(&philo->last_lunch);
 }

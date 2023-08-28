@@ -6,19 +6,19 @@
 /*   By: johmatos <johmatos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 15:38:07 by johmatos          #+#    #+#             */
-/*   Updated: 2023/08/10 18:13:56 by johmatos         ###   ########.fr       */
+/*   Updated: 2023/08/28 16:18:24 by johmatos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 # include "./error.h"
-# include <stddef.h>
 # include <pthread.h>
 # include <stdint.h>
 # include <unistd.h>
-# include <malloc.h>
 # include <sys/time.h>
+# include <malloc.h>
+# include <stdio.h>
 # define MAX_ARGS 5
 # define FALSE 0
 # define TRUE 1
@@ -39,10 +39,10 @@ typedef struct _s_philo	t_philo;
 typedef struct _s_table
 {
 	pthread_mutex_t	channel;
-	pthread_mutex_t	end;
-	t_bool			is_the_end;
+	_Atomic t_bool	is_the_end;
 	int				start;
 	t_philo			*philo;
+	_Atomic int		finishes;
 
 }	t_table;
 
@@ -52,11 +52,9 @@ typedef struct _s_philo
 	pthread_t		thread_id;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	rigth_fork;
-	pthread_mutex_t	times_run;
-	int				last_eaten;
+	_Atomic time_t	last_eaten;
 	t_sint			times_to_eat;
 	int				start;
-	pthread_mutex_t	last_lunch;
 	size_t			lifetime;
 	size_t			lunch_time;
 	size_t			sleep_time;
@@ -73,11 +71,11 @@ typedef enum e_states
 
 typedef struct _s_rules
 {
-	size_t		*n_philo;
-	size_t		die_count;
-	size_t		eat_count;
-	size_t		sleep_count;
-}				t_rules;
+	size_t			*n_philo;
+	size_t			die_count;
+	size_t			eat_count;
+	size_t			sleep_count;
+}					t_rules;
 
 int				ft_strlen(char *str);
 int				print_fd(char *str, int fd);
@@ -105,5 +103,5 @@ void			take_forks(t_philo *philo);
 void			drop_forks(t_philo *philo);
 void			update_time(t_philo *philo);
 void			god(void);
-int				acc(t_philo *philo);
+size_t			has_lunch(void);
 #endif

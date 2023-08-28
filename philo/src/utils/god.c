@@ -6,46 +6,41 @@
 /*   By: johmatos <johmatos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 14:03:44 by johmatos          #+#    #+#             */
-/*   Updated: 2023/08/27 23:27:01 by johmatos         ###   ########.fr       */
+/*   Updated: 2023/08/28 17:20:12 by johmatos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include <pthread.h>
-#include <stddef.h>
 #include <stdio.h>
-#include <unistd.h>
+#include <time.h>
 
 static void	set_dead(void);
 
 t_bool	is_dead(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->last_lunch);
-	if ((get_time() - philo->last_eaten) > (int)getter_rules()[LIFETIME] &&
-			philo->times_to_eat > 0)
+	int	time;
+
+	time = philo->last_eaten;
+	if (time == -1 && getter_rules()[PHILO_QT] != 1)
+		return (FALSE);
+	if (get_time() - time > (time_t)getter_rules()[LIFETIME])
 	{
-		print_action("is dead", philo);
+		print_action("died", philo);
 		set_dead();
+		return (TRUE);
 	}
-	pthread_mutex_unlock(&philo->last_lunch);
 	return (FALSE);
 }
 
 static void	set_dead(void)
 {
-	pthread_mutex_lock(&getter_table()->end);
-	getter_table()->is_the_end = 1;
-	pthread_mutex_unlock(&getter_table()->end);
+	getter_table()->is_the_end = TRUE;
 }
 
 t_bool	is_end(void)
 {
-	t_bool	end;
-
-	pthread_mutex_lock(&getter_table()->end);
-	end = getter_table()->is_the_end;
-	pthread_mutex_unlock(&getter_table()->end);
-	return (end);
+	return (getter_table()->is_the_end);
 }
 
 static void	wait(t_philo *philo)
@@ -56,7 +51,6 @@ static void	wait(t_philo *philo)
 	while (++count < getter_rules()[PHILO_QT])
 		pthread_join(philo[count].thread_id, NULL);
 	pthread_mutex_destroy(&getter_table()->channel);
-	pthread_mutex_destroy(&getter_table()->end);
 	count = -1;
 	while (++count < getter_rules()[PHILO_QT])
 		pthread_mutex_destroy(&philo[count].rigth_fork);
@@ -71,13 +65,15 @@ void	god(void)
 	philo = getter_table()->philo;
 	while (!is_end() && getter_rules()[PHILO_QT] > 1)
 	{
-		count = 0;
+		if (has_lunch() == getter_rules()[PHILO_QT])
+			break ;
 		while (count < getter_rules()[PHILO_QT])
 		{
+			is_dead(&philo[count]);
 			count++;
 		}
 		count = 0;
-		usleep(50);
+		usleep(500);
 	}
 	wait(philo);
 }
