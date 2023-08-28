@@ -6,7 +6,7 @@
 /*   By: johmatos <johmatos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 15:38:07 by johmatos          #+#    #+#             */
-/*   Updated: 2023/08/28 16:18:24 by johmatos         ###   ########.fr       */
+/*   Updated: 2023/08/28 19:00:13 by johmatos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define PHILO_H
 # include "./error.h"
 # include <pthread.h>
-# include <stdint.h>
 # include <unistd.h>
 # include <sys/time.h>
 # include <malloc.h>

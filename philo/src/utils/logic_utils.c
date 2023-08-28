@@ -6,12 +6,11 @@
 /*   By: johmatos <johmatos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/10 17:16:56 by johmatos          #+#    #+#             */
-/*   Updated: 2023/08/28 17:40:16 by johmatos         ###   ########.fr       */
+/*   Updated: 2023/08/28 19:02:21 by johmatos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <stddef.h>
 
 t_bool	is_negative(char c)
 {

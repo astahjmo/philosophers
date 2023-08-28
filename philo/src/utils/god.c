@@ -6,14 +6,11 @@
 /*   By: johmatos <johmatos@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 14:03:44 by johmatos          #+#    #+#             */
-/*   Updated: 2023/08/28 17:20:12 by johmatos         ###   ########.fr       */
+/*   Updated: 2023/08/28 19:02:27 by johmatos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <pthread.h>
-#include <stdio.h>
-#include <time.h>
 
 static void	set_dead(void);
 
